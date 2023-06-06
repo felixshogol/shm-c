@@ -20,7 +20,7 @@ static sem_t *mutex_sem, *buffer_count_sem, *spool_signal_sem;
 static int fd_shm;
 static dfxp_shm_t shm;
 
-dfxp_shm_config_t g_config;
+dfxp_traffic_config_t g_config;
 
 static void usage(void)
 {
@@ -50,19 +50,19 @@ int main(int argc, char **argv)
 
     if (strcmp(cmd, "stop") == 0)
     {
-        shm.cmd = DFPX_SHM_CMD_STOP;
+        shm.cmd = DFXP_SHM_CMD_STOP;
     }
     else if (strcmp(cmd, "start") == 0)
     {
-        shm.cmd = DFPX_SHM_CMD_START;
+        shm.cmd = DFXP_SHM_CMD_START;
     }
     else if (strcmp(cmd, "shutdown") == 0)
     {
-        shm.cmd = DFPX_SHM_CMD_SHUTDOWN;
+        shm.cmd = DFXP_SHM_CMD_SHUTDOWN;
     }
     else if (strcmp(cmd, "config") == 0)
     {
-        shm.cmd = DFPX_SHM_CMD_CONFIG;
+        shm.cmd = DFXP_SHM_CMD_CONFIG;
         if (argc != 4)
         {
             printf("DFPX_SHM_CMD_CONFIG. wrong argv arguments %d\n", argc);
@@ -76,7 +76,7 @@ int main(int argc, char **argv)
     }
     else if (strcmp(cmd, "stats") == 0)
     {
-        shm.cmd = DFPX_SHM_CMD_GET_STATS;
+        shm.cmd = DFXP_SHM_CMD_GET_STATS;
     }
     else
     {
@@ -87,7 +87,7 @@ int main(int argc, char **argv)
 
     printf("Send command (%s)\n", get_shm_cmd_name(shm.cmd));
     shm.cfg.ipv6 = true;
-    shm.status = DFPX_SHM_STATUS_WRITTEN;
+    shm.status = DFXP_SHM_STATUS_WRITTEN;
 
     ret = ShmInit(SHARED_MEM_NAME, O_RDWR, 0);
     if (ret != 0)

@@ -78,36 +78,36 @@ static struct option g_options[] = {
     {"conf", required_argument, NULL, 'c'},
     {NULL, 0, NULL, 0}};
 
-const char * get_shm_cmd_name (dfpx_shm_cmd cmd)
+const char * get_shm_cmd_name (dfxp_shm_cmd cmd)
 {
     switch (cmd) {
-        case DFPX_SHM_CMD_START:
-            return config_shm_cmd_name[DFPX_SHM_CMD_START];
+        case DFXP_SHM_CMD_START:
+            return config_shm_cmd_name[DFXP_SHM_CMD_START];
         break;
-        case DFPX_SHM_CMD_STOP:
-            return config_shm_cmd_name[DFPX_SHM_CMD_STOP];
+        case DFXP_SHM_CMD_STOP:
+            return config_shm_cmd_name[DFXP_SHM_CMD_STOP];
         break;
-        case DFPX_SHM_CMD_CONFIG:
-            return config_shm_cmd_name[DFPX_SHM_CMD_CONFIG];
+        case DFXP_SHM_CMD_CONFIG:
+            return config_shm_cmd_name[DFXP_SHM_CMD_CONFIG];
         break;
-        case DFPX_SHM_CMD_GET_STATS:
-            return config_shm_cmd_name[DFPX_SHM_CMD_GET_STATS];
+        case DFXP_SHM_CMD_GET_STATS:
+            return config_shm_cmd_name[DFXP_SHM_CMD_GET_STATS];
         break;
-        case DFPX_SHM_CMD_SHUTDOWN:
-            return config_shm_cmd_name[DFPX_SHM_CMD_SHUTDOWN];
+        case DFXP_SHM_CMD_SHUTDOWN:
+            return config_shm_cmd_name[DFXP_SHM_CMD_SHUTDOWN];
         break;
-        case DFPX_SHM_CMD_DEL_IP_GTP:
-            return config_shm_cmd_name[DFPX_SHM_CMD_DEL_IP_GTP];
+        case DFXP_SHM_CMD_DEL_IP_GTP:
+            return config_shm_cmd_name[DFXP_SHM_CMD_DEL_IP_GTP];
         break;
-        case DFPX_SHM_CMD_ADD_IP_GTP:
-            return config_shm_cmd_name[DFPX_SHM_CMD_ADD_IP_GTP];
+        case DFXP_SHM_CMD_ADD_IP_GTP:
+            return config_shm_cmd_name[DFXP_SHM_CMD_ADD_IP_GTP];
         break;
         default:
-            return config_shm_cmd_name[DFPX_SHM_CMD_NONE];
+            return config_shm_cmd_name[DFXP_SHM_CMD_NONE];
     }
 }
 
-int config_parse(int argc, char **argv, dfxp_shm_config_t *cfg)
+int config_parse(int argc, char **argv, dfxp_traffic_config_t *cfg)
 {
 
     int opt = 0;
@@ -451,7 +451,7 @@ static int config_parse_number(char *str, bool float_enable, bool rate_enable)
 
 static int config_parse_mode(int argc, char *argv[], void *data)
 {
-    dfxp_shm_config_t *cfg = data;
+    dfxp_traffic_config_t *cfg = data;
 
     if (argc != 2)
     {
@@ -477,7 +477,7 @@ static int config_parse_mode(int argc, char *argv[], void *data)
 
 static int config_parse_protocol(int argc, char *argv[], void *data)
 {
-    dfxp_shm_config_t *cfg = data;
+    dfxp_traffic_config_t *cfg = data;
 
     if (argc != 2)
     {
@@ -510,7 +510,7 @@ static int config_parse_protocol(int argc, char *argv[], void *data)
 
 static int config_parse_gtpu_enable(int argc, char *argv[], void *data)
 {
-    dfxp_shm_config_t *cfg = data;
+    dfxp_traffic_config_t *cfg = data;
 
     if (argc != 2)
     {
@@ -542,7 +542,7 @@ static int config_parse_duration(int argc, char *argv[], void *data)
     int rate = 1;
     int duration = 0;
     double val = 0.0;
-    dfxp_shm_config_t *cfg = data;
+    dfxp_traffic_config_t *cfg = data;
 
     if (argc != 2)
     {
@@ -582,7 +582,7 @@ static int config_parse_duration(int argc, char *argv[], void *data)
 static int config_parse_cps(int argc, char *argv[], void *data)
 {
     int cps = 0;
-    dfxp_shm_config_t *cfg = data;
+    dfxp_traffic_config_t *cfg = data;
 
     if (argc != 2)
     {
@@ -602,7 +602,7 @@ static int config_parse_cps(int argc, char *argv[], void *data)
 static int config_parse_cc(int argc, char *argv[], void *data)
 {
     int cc = 0;
-    dfxp_shm_config_t *cfg = data;
+    dfxp_traffic_config_t *cfg = data;
 
     if (argc != 2)
     {
@@ -622,7 +622,7 @@ static int config_parse_cc(int argc, char *argv[], void *data)
 static int config_parse_launch_num(int argc, char *argv[], void *data)
 {
     int val = 0;
-    dfxp_shm_config_t *cfg = data;
+    dfxp_traffic_config_t *cfg = data;
 
     if (argc != 2)
     {
@@ -641,7 +641,7 @@ static int config_parse_launch_num(int argc, char *argv[], void *data)
 static inline int config_parse_tx_burst(int argc, char *argv[], void *data)
 {
     int val = 0;
-    dfxp_shm_config_t *cfg = data;
+    dfxp_traffic_config_t *cfg = data;
 
     if (argc != 2)
     {
@@ -660,7 +660,7 @@ static inline int config_parse_tx_burst(int argc, char *argv[], void *data)
 static int config_parse_slow_start(int argc, char *argv[], void *data)
 {
     int val = 0;
-    dfxp_shm_config_t *cfg = data;
+    dfxp_traffic_config_t *cfg = data;
 
     if (argc != 2)
     {
@@ -679,7 +679,7 @@ static int config_parse_slow_start(int argc, char *argv[], void *data)
 static int config_parse_wait(int argc, char *argv[], void *data)
 {
     int val = 0;
-    dfxp_shm_config_t *cfg = data;
+    dfxp_traffic_config_t *cfg = data;
 
     if (argc != 2)
     {

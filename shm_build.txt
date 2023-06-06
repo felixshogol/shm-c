@@ -1,0 +1,7 @@
+gcc dfxp_shm_server.c -pthread -lrt -o dfxp_shm_server -g
+gcc dfxp_shm_client.c -pthread -lrt -o dfxp_shm_client -g
+
+
+gcc client.c -o client -lrt -lpthread
+gcc logger.c -o logger -lrt -lpthread
+

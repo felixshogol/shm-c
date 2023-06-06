@@ -1,0 +1,52 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: shm client Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [
+        "config",
+        "-c",
+        "${workspaceFolder}/shm_client.conf"
+      ],
+      "stopAtEntry": false,
+      "externalConsole": false,
+      "cwd": "${fileDirname}",
+      "program": "/home/machine/workspace/shm/test1/build/dfxp_shm_client.exe",
+      "MIMode": "gdb",
+      "miDebuggerPath": "/media/sf_Workspace/dfxp/gdbroot.sh",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        },
+        {
+          "description": "Set Disassembly Flavor to Intel",
+          "text": "-gdb-set disassembly-flavor intel",
+          "ignoreFailures": true
+        }
+      ]
+    },
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": false,
+      "cwd": "/media/sf_Workspace/shm/test1",
+      "program": "/media/sf_Workspace/shm/test1/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}
