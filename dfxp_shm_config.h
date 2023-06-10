@@ -17,6 +17,6 @@ struct config_keyword {
 
 
 int config_parse(int argc, char **argv, dfxp_traffic_config_t *cfg);
-const char * get_shm_cmd_name (dfxp_shm_cmd cmd);
+
 
 #endif

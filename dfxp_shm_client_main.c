@@ -62,7 +62,7 @@ int main(int argc, char **argv)
     }
     else if (strcmp(cmd, "config") == 0)
     {
-        shm.cmd = DFXP_SHM_CMD_CONFIG;
+        shm.cmd = DFXP_SHM_CMD_CONFIG_TRAFFIC;
         if (argc != 4)
         {
             printf("DFPX_SHM_CMD_CONFIG. wrong argv arguments %d\n", argc);
@@ -85,9 +85,9 @@ int main(int argc, char **argv)
         exit(1);
     }
 
-    printf("Send command (%s)\n", get_shm_cmd_name(shm.cmd));
+    printf("Send command (%s)\n", ShmGetCmdName(shm.cmd));
     shm.cfg.ipv6 = true;
-    shm.status = DFXP_SHM_STATUS_WRITTEN;
+    shm.status = DFXP_SHM_STATUS_WRITTEN_BY_CLIENT;
 
     ret = ShmInit(SHARED_MEM_NAME, O_RDWR, 0);
     if (ret != 0)

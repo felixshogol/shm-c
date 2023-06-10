@@ -6,24 +6,40 @@
 #include <netinet/ip.h>
 #include <netinet/ip6.h>
 
+
 #define SEM_MUTEX_NAME "/sem-mutex-dfxp-shm"
 #define SEM_BUFFER_COUNT_NAME "/sem-count-dfxp-shm"
 #define SEM_SPOOL_SIGNAL_NAME "/sem-spool-dfxp-shm"
 #define SHARED_MEM_NAME "/dfxp-shm"
 
+#define DFXP_MAX_BUFFERS 1
+
+#define DFXP_SHM_MAX_IP_GTPS 100
+
+#define THREAD_NUM_MAX      64
+#define NETIF_PORT_MAX      4
+#define PCI_LEN             12
+#define SERVER_IPADDR_MAX   16
+// gtp-u config
+#define GTP_CFG_MAX_TUNNELS 10000
+
+
 
 typedef enum
 {
     DFXP_SHM_STATUS_IDLE = 0,
-    DFXP_SHM_STATUS_WRITTEN,
-    DFXP_SHM_STATUS_READ,
+    DFXP_SHM_STATUS_WRITTEN_BY_SERVER,
+    DFXP_SHM_STATUS_WRITTEN_BY_CLIENT,
+    DFXP_SHM_STATUS_READ_BY_SERVER,
+    DFXP_SHM_STATUS_READ_BY_CLIENT,
 
 } dfxp_shm_status;
 
 typedef enum
 {
     DFXP_SHM_CMD_NONE = 0,
-    DFXP_SHM_CMD_CONFIG,
+    DFXP_SHM_CMD_CONFIG_TRAFFIC,
+    DFXP_SHM_CMD_CONFIG_PORTS,
     DFXP_SHM_CMD_START,
     DFXP_SHM_CMD_STOP,
     DFXP_SHM_CMD_SHUTDOWN,
@@ -33,12 +49,11 @@ typedef enum
 
 } dfxp_shm_cmd;
 
-#define DFXP_THREAD_NUM_MAX 64
-#define DFXP_NETIF_PORT_MAX 4
-#define DFXP_PCI_LEN 12
-#define DFXP_SHM_MAX_IP_GTPS 100
-#define SERVER_IPADDR_MAX   16
 
+/*
+ * The lower 32 bits represent an IPv6 address.
+ * The IPv4 address is in the same position as the lower 32 bits of IPv6.
+ * */
 typedef struct
 {
     union
@@ -62,7 +77,7 @@ typedef struct dfxp_port_s
 {
     server_ipaddr_range_t server_ipaddr_range;
     ipaddr_t gateway_ip;
-    char pci[DFXP_PCI_LEN + 1]; // pci string
+    char pci[PCI_LEN + 1]; // pci string
     int lport_min;          //  default 1 65535
     int lport_max;
 
@@ -70,7 +85,7 @@ typedef struct dfxp_port_s
 
 typedef struct dfxp_ports_s
 {
-    dfxp_port_t ports[DFXP_NETIF_PORT_MAX];
+    dfxp_port_t ports[NETIF_PORT_MAX];
     int port_num;
 
 } dfxp_ports_t;
@@ -92,7 +107,7 @@ typedef struct dfxp_shm_ip_gtp_s
 
 typedef struct dfxp_shm_ip_gtps_s
 {
-    dfxp_shm_ip_gtp_t ip_gtp[DFXP_SHM_MAX_IP_GTPS];
+    dfxp_shm_ip_gtp_t ip_gtp[GTP_CFG_MAX_TUNNELS];
     int num;
 } dfxp_shm_ip_gtps_t;
 
@@ -106,7 +121,7 @@ typedef struct dfxp_traffic_config_s
     // required
     bool server;  // mode client | server
     int duration; // default 60s
-    int cpu[DFXP_THREAD_NUM_MAX];
+    int cpu[THREAD_NUM_MAX];
     int cpu_num;
     int cps; // total connections per seconds
 
@@ -146,7 +161,6 @@ typedef struct dfxp_shm_s
     union
     {
         dfxp_traffic_config_t cfg;
-        //  Set the port ranges that the server listens to,
         dfxp_ports_t ports;
         dfxp_shm_ip_gtps_t ip_gtps;
         dfxp_stats_t stats;

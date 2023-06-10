@@ -24,17 +24,6 @@ static int config_parse_slow_start(int argc, char *argv[], void *data);
 static int config_parse_wait(int argc, char *argv[], void *data);
 
 
-const char *config_shm_cmd_name[] = {
-
-    "DFPX_SHM_CMD_NONE",
-    "DFPX_SHM_CMD_CONFIG",
-    "DFPX_SHM_CMD_START",
-    "DFPX_SHM_CMD_STOP",
-    "DFPX_SHM_CMD_SHUTDOWN",
-    "DFPX_SHM_CMD_ADD_IP_GTP",
-    "DFPX_SHM_CMD_DEL_IP_GTP",
-    "DFPX_SHM_CMD_GET_STATS",
-};
 
 static struct config_keyword g_config_keywords[] = {
     // {"keepalive", config_parse_keepalive, "Interval(Timeout) [Number[0-" DEFAULT_STR(KEEPALIVE_REQ_NUM) "]], "
@@ -78,34 +67,6 @@ static struct option g_options[] = {
     {"conf", required_argument, NULL, 'c'},
     {NULL, 0, NULL, 0}};
 
-const char * get_shm_cmd_name (dfxp_shm_cmd cmd)
-{
-    switch (cmd) {
-        case DFXP_SHM_CMD_START:
-            return config_shm_cmd_name[DFXP_SHM_CMD_START];
-        break;
-        case DFXP_SHM_CMD_STOP:
-            return config_shm_cmd_name[DFXP_SHM_CMD_STOP];
-        break;
-        case DFXP_SHM_CMD_CONFIG:
-            return config_shm_cmd_name[DFXP_SHM_CMD_CONFIG];
-        break;
-        case DFXP_SHM_CMD_GET_STATS:
-            return config_shm_cmd_name[DFXP_SHM_CMD_GET_STATS];
-        break;
-        case DFXP_SHM_CMD_SHUTDOWN:
-            return config_shm_cmd_name[DFXP_SHM_CMD_SHUTDOWN];
-        break;
-        case DFXP_SHM_CMD_DEL_IP_GTP:
-            return config_shm_cmd_name[DFXP_SHM_CMD_DEL_IP_GTP];
-        break;
-        case DFXP_SHM_CMD_ADD_IP_GTP:
-            return config_shm_cmd_name[DFXP_SHM_CMD_ADD_IP_GTP];
-        break;
-        default:
-            return config_shm_cmd_name[DFXP_SHM_CMD_NONE];
-    }
-}
 
 int config_parse(int argc, char **argv, dfxp_traffic_config_t *cfg)
 {

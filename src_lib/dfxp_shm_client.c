@@ -17,6 +17,18 @@ static dfxp_shm_t *shared_mem_ptr;
 static sem_t *mutex_sem, *buffer_count_sem, *spool_signal_sem;
 static int fd_shm;
 
+const char *shm_cmd_name[] = {
+
+    "DFXP_SHM_CMD_NONE",
+    "DFXP_SHM_CMD_CONFIG_TRAFFIC",
+    "DFXP_SHM_CMD_CONFIG_PORTS",
+    "DFXP_SHM_CMD_START",
+    "DFXP_SHM_CMD_STOP",
+    "DFXP_SHM_CMD_SHUTDOWN",
+    "DFXP_SHM_CMD_ADD_IP_GTP",
+    "DFXP_SHM_CMD_DEL_IP_GTP",
+    "DFXP_SHM_CMD_GET_STATS"};
+
 int ShmInit(const char *name, int oflag, int mode)
 {
 
@@ -27,7 +39,7 @@ int ShmInit(const char *name, int oflag, int mode)
         error("shm_open");
 
     if ((shared_mem_ptr = (dfxp_shm_t *)mmap(NULL, sizeof(dfxp_shm_t), PROT_READ | PROT_WRITE, MAP_SHARED,
-                               fd_shm, 0)) == MAP_FAILED)
+                                             fd_shm, 0)) == MAP_FAILED)
         error("mmap");
 
     //  mutual exclusion semaphore, mutex_sem
@@ -62,7 +74,7 @@ int ShmWrite(dfxp_shm_t *shm)
 
     printf("DEBUG: %s:%d:%s -> writing shn\n", __FILE__, __LINE__, __func__);
 
-    memcpy(shared_mem_ptr,shm, sizeof(dfxp_shm_t));
+    memcpy(shared_mem_ptr, shm, sizeof(dfxp_shm_t));
 
     sleep(1);
 
@@ -77,9 +89,40 @@ int ShmWrite(dfxp_shm_t *shm)
     printf("DEBUG: %s:%d:%s -> exit ...\n", __FILE__, __LINE__, __func__);
 
     return 0;
-
 }
 
+const char *ShmGetCmdName(dfxp_shm_cmd cmd)
+{
+    switch (cmd)
+    {
+    case DFXP_SHM_CMD_START:
+        return shm_cmd_name[DFXP_SHM_CMD_START];
+        break;
+    case DFXP_SHM_CMD_STOP:
+        return shm_cmd_name[DFXP_SHM_CMD_STOP];
+        break;
+    case DFXP_SHM_CMD_CONFIG_TRAFFIC:
+        return shm_cmd_name[DFXP_SHM_CMD_CONFIG_TRAFFIC];
+        break;
+    case DFXP_SHM_CMD_CONFIG_PORTS:
+        return shm_cmd_name[DFXP_SHM_CMD_CONFIG_PORTS];
+        break;
+    case DFXP_SHM_CMD_GET_STATS:
+        return shm_cmd_name[DFXP_SHM_CMD_GET_STATS];
+        break;
+    case DFXP_SHM_CMD_SHUTDOWN:
+        return shm_cmd_name[DFXP_SHM_CMD_SHUTDOWN];
+        break;
+    case DFXP_SHM_CMD_DEL_IP_GTP:
+        return shm_cmd_name[DFXP_SHM_CMD_DEL_IP_GTP];
+        break;
+    case DFXP_SHM_CMD_ADD_IP_GTP:
+        return shm_cmd_name[DFXP_SHM_CMD_ADD_IP_GTP];
+        break;
+    default:
+        return shm_cmd_name[DFXP_SHM_CMD_NONE];
+    }
+}
 
 // Print system error and exit
 int error(const char *msg)
@@ -87,4 +130,3 @@ int error(const char *msg)
     perror(msg);
     return -1;
 }
-
