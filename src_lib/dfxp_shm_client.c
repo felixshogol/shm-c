@@ -57,6 +57,23 @@ int ShmInit(const char *name, int oflag, int mode)
     return 0;
 }
 
+int ShmSizeofCfg() {
+    return sizeof (dfxp_shm_t);
+}
+
+int ShmSizeofTraffic() {
+    return sizeof (dfxp_traffic_config_t);
+}
+
+int ShmSizeofPorts() {
+    return sizeof (dfxp_ports_t);
+}
+
+int ShmSizeofIpGtps() {
+    return sizeof (dfxp_shm_ip_gtps_t);
+}
+
+
 int ShmWrite(dfxp_shm_t *shm)
 {
     printf("DEBUG: %s:%d:%s \n", __FILE__, __LINE__, __func__);

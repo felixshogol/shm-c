@@ -119,8 +119,8 @@ typedef struct dfxp_stats_s
 typedef struct dfxp_traffic_config_s
 {
     // required
-    bool server;  // mode client | server
-    int duration; // default 60s
+    bool server;  // mode client | server, true - server
+    int duration; // seconds. default 60s
     int cpu[THREAD_NUM_MAX];
     int cpu_num;
     int cps; // total connections per seconds
@@ -160,11 +160,11 @@ typedef struct dfxp_shm_s
     dfxp_shm_status status;
     union
     {
-        dfxp_traffic_config_t cfg;
-        dfxp_ports_t ports;
-        dfxp_shm_ip_gtps_t ip_gtps;
+        dfxp_traffic_config_t cfgTraffic;
+        dfxp_ports_t cfgPorts;
+        dfxp_shm_ip_gtps_t cfgIpGtps;
         dfxp_stats_t stats;
-    };
+    } value;
 } dfxp_shm_t;
 
 int dfxp_shm_main(int argc, char **argv);
