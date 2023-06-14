@@ -23,8 +23,6 @@
 #define GTP_CFG_MAX_TUNNELS 10000
 #define MAX_LOCAL_PORTS 1000
 
-
-
 typedef enum
 {
     DFXP_SHM_STATUS_IDLE = 0,
@@ -74,12 +72,11 @@ typedef struct server_ipaddr_range_s
 
 typedef struct dfxp_port_s
 {
-    server_ipaddr_range_t server_ipaddr_range;
-    ipaddr_t gateway_ip;
+    char local_ip[INET6_ADDRSTRLEN];
+    char gateway_ip[INET6_ADDRSTRLEN];
+    char server_ip[INET6_ADDRSTRLEN];
     char pci[PCI_LEN + 1]; // pci string
-    int lport_min;         //  default 1 65535
-    int lport_max;
-
+    
 } dfxp_port_t;
 
 typedef struct dfxp_ports_s
@@ -128,9 +125,9 @@ typedef struct dfxp_traffic_config_s
     int listen_num; // default 1
 
     // not required
-    int cc; /* current connections not required only client*/
-    int keepalive_interval;  // useconds 
-    int keepalive_num;       //number of requests 
+    int cc;                 /* current connections not required only client*/
+    int keepalive_interval; // useconds
+    int keepalive_num;      // number of requests
 
     uint32_t launch_num; // connections are initiated by the client at a time. default = 4 only clinet
     bool payload_random; // not required
@@ -144,7 +141,7 @@ typedef struct dfxp_traffic_config_s
     uint8_t tos;      // not required default 0
     bool tcp_rst;     // Set whether replies rst to SYN packets requesting unopened TCP ports. dafault true
 
-    int lport_min;    //  default 1 65535
+    int lport_min; //  default 1 65535
     int lport_max;
     bool gtpu_enable;
 
@@ -157,17 +154,24 @@ typedef struct dfxp_traffic_config_s
 
 } dfxp_traffic_config_t;
 
+typedef struct dfxp_ueips_s{
+   char ueip[GTP_CFG_MAX_TUNNELS];
+
+}dfxp_ueips_t;
+
+
 typedef struct dfxp_shm_s
 {
     dfxp_shm_cmd cmd;
     dfxp_shm_status status;
-    union
-    {
+    //union
+    //{
         dfxp_traffic_config_t cfgTraffic;
         dfxp_ports_t cfgPorts;
+        dfxp_ueips_t  cfgUeIp;
         dfxp_shm_ip_gtps_t cfgIpGtps;
         dfxp_stats_t stats;
-    } value;
+    //} value;
 } dfxp_shm_t;
 
 int dfxp_shm_main(int argc, char **argv);

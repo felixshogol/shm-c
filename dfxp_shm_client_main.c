@@ -86,7 +86,6 @@ int main(int argc, char **argv)
     }
 
     printf("Send command (%s)\n", ShmGetCmdName(shm.cmd));
-    shm.cfg.ipv6 = true;
     shm.status = DFXP_SHM_STATUS_WRITTEN_BY_CLIENT;
 
     ret = ShmInit(SHARED_MEM_NAME, O_RDWR, 0);

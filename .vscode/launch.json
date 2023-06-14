@@ -13,7 +13,7 @@
       "stopAtEntry": false,
       "externalConsole": false,
       "cwd": "${fileDirname}",
-      "program": "/home/machine/workspace/shm/test1/build/dfxp_shm_client.exe",
+      "program": "/media/sf_Workspace/shm-c/build/dfxp_shm_client",
       "MIMode": "gdb",
       "miDebuggerPath": "/media/sf_Workspace/dfxp/gdbroot.sh",
       "setupCommands": [

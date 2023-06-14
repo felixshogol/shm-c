@@ -17,6 +17,8 @@ static dfxp_shm_t *shared_mem_ptr;
 static sem_t *mutex_sem, *buffer_count_sem, *spool_signal_sem;
 static int fd_shm;
 
+static void dump_shm_ports(char *title, dfxp_ports_t *ports);
+
 const char *shm_cmd_name[] = {
 
     "DFXP_SHM_CMD_NONE",
@@ -57,41 +59,50 @@ int ShmInit(const char *name, int oflag, int mode)
     return 0;
 }
 
-int ShmSizeofCfg() {
-    return sizeof (dfxp_shm_t);
+int ShmSizeofCfg()
+{
+    return sizeof(dfxp_shm_t);
 }
 
-int ShmSizeofTraffic() {
-    return sizeof (dfxp_traffic_config_t);
+int ShmSizeofTraffic()
+{
+    return sizeof(dfxp_traffic_config_t);
 }
 
-int ShmSizeofPorts() {
-    return sizeof (dfxp_ports_t);
+int ShmSizeofPorts()
+{
+    return sizeof(dfxp_ports_t);
 }
 
-int ShmSizeofIpGtps() {
-    return sizeof (dfxp_shm_ip_gtps_t);
+int ShmSizeofIpGtps()
+{
+    return sizeof(dfxp_shm_ip_gtps_t);
 }
-
 
 int ShmWrite(dfxp_shm_t *shm)
 {
     printf("DEBUG: %s:%d:%s \n", __FILE__, __LINE__, __func__);
+
     // get a buffer: P (buffer_count_sem);
     if (sem_wait(buffer_count_sem) == -1)
         error("sem_wait: buffer_count_sem");
 
     printf("DEBUG: %s:%d:%s -> wait mutex_sem\n", __FILE__, __LINE__, __func__);
 
-    /* There might be multiple producers. We must ensure that
-        only one producer uses buffer_index at a time.  */
-    // P (mutex_sem);
+    /* There might be multiple producers. Only one producer uses buffer_index at a time.  */
     if (sem_wait(mutex_sem) == -1)
         error("mutex_sem");
 
     printf("DEBUG: %s:%d:%s -> writing shn\n", __FILE__, __LINE__, __func__);
 
     memcpy(shared_mem_ptr, shm, sizeof(dfxp_shm_t));
+
+    printf("DEBUG: %s:%d:%s -> writing cmd %d\n", __FILE__, __LINE__, __func__, shared_mem_ptr->cmd);
+    if (shared_mem_ptr->cmd == DFXP_SHM_CMD_CONFIG_PORTS)
+    {
+
+        dump_shm_ports("shm-c", &shared_mem_ptr->cfgPorts);
+    }
 
     sleep(1);
 
@@ -146,4 +157,13 @@ int error(const char *msg)
 {
     perror(msg);
     return -1;
+}
+
+static void dump_shm_ports(char *title, dfxp_ports_t *ports)
+{
+    printf("##### Config SHM ports dump %s\n", title);
+    printf("port_num:           %d\n", ports->port_num);
+    printf("local_ip:           %s\n", ports->ports[0].local_ip);
+    printf("gateway_ip          %s\n", ports->ports[0].gateway_ip);
+    printf("server_ip           %s\n", ports->ports[0].server_ip);
 }

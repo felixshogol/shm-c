@@ -39,7 +39,8 @@
     "dfxp_shm_config.h": "c",
     "limits": "c",
     "stat.h": "c",
-    "types.h": "c"
+    "types.h": "c",
+    "type_traits": "c"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }
