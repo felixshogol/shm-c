@@ -6,7 +6,6 @@
 #include <netinet/ip.h>
 #include <netinet/ip6.h>
 
-
 #define SEM_MUTEX_NAME "/sem-mutex-dfxp-shm"
 #define SEM_BUFFER_COUNT_NAME "/sem-count-dfxp-shm"
 #define SEM_SPOOL_SIGNAL_NAME "/sem-spool-dfxp-shm"
@@ -16,12 +15,13 @@
 
 #define DFXP_SHM_MAX_IP_GTPS 100
 
-#define THREAD_NUM_MAX      64
-#define NETIF_PORT_MAX      4
-#define PCI_LEN             12
-#define SERVER_IPADDR_MAX   16
+#define THREAD_NUM_MAX 64
+#define NETIF_PORT_MAX 4
+#define PCI_LEN 12
+#define SERVER_IPADDR_MAX 16
 // gtp-u config
 #define GTP_CFG_MAX_TUNNELS 10000
+#define MAX_LOCAL_PORTS 1000
 
 
 
@@ -48,7 +48,6 @@ typedef enum
     DFXP_SHM_CMD_GET_STATS,
 
 } dfxp_shm_cmd;
-
 
 /*
  * The lower 32 bits represent an IPv6 address.
@@ -78,7 +77,7 @@ typedef struct dfxp_port_s
     server_ipaddr_range_t server_ipaddr_range;
     ipaddr_t gateway_ip;
     char pci[PCI_LEN + 1]; // pci string
-    int lport_min;          //  default 1 65535
+    int lport_min;         //  default 1 65535
     int lport_max;
 
 } dfxp_port_t;
@@ -130,7 +129,9 @@ typedef struct dfxp_traffic_config_s
 
     // not required
     int cc; /* current connections not required only client*/
-    bool keepalive;
+    int keepalive_interval;  // useconds 
+    int keepalive_num;       //number of requests 
+
     uint32_t launch_num; // connections are initiated by the client at a time. default = 4 only clinet
     bool payload_random; // not required
     int payload_size;    // not required  max 1514 default 0
@@ -143,6 +144,8 @@ typedef struct dfxp_traffic_config_s
     uint8_t tos;      // not required default 0
     bool tcp_rst;     // Set whether replies rst to SYN packets requesting unopened TCP ports. dafault true
 
+    int lport_min;    //  default 1 65535
+    int lport_max;
     bool gtpu_enable;
 
     bool ipv6;
