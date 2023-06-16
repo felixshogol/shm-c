@@ -64,19 +64,13 @@ typedef struct
     };
 } ipaddr_t;
 
-typedef struct server_ipaddr_range_s
-{
-    ipaddr_t addresses[SERVER_IPADDR_MAX];
-    int num;
-} server_ipaddr_range_t;
-
 typedef struct dfxp_port_s
 {
     char local_ip[INET6_ADDRSTRLEN];
     char gateway_ip[INET6_ADDRSTRLEN];
     char server_ip[INET6_ADDRSTRLEN];
     char pci[PCI_LEN + 1]; // pci string
-    
+
 } dfxp_port_t;
 
 typedef struct dfxp_ports_s
@@ -88,7 +82,7 @@ typedef struct dfxp_ports_s
 
 typedef struct dfxp_shm_tunnel_s
 {
-    uint8_t id;
+    uint32_t id;
     uint32_t teid_in;
     uint32_t teid_out;
     uint32_t ue_ipv4;
@@ -97,7 +91,7 @@ typedef struct dfxp_shm_tunnel_s
 
 typedef struct dfxp_shm_ip_gtp_s
 {
-    ipaddr_t address;
+    char address[INET6_ADDRSTRLEN];
     dfxp_shm_tunnel_t tunnel;
 } dfxp_shm_ip_gtp_t;
 
@@ -154,24 +148,14 @@ typedef struct dfxp_traffic_config_s
 
 } dfxp_traffic_config_t;
 
-typedef struct dfxp_ueips_s{
-   char ueip[GTP_CFG_MAX_TUNNELS];
-
-}dfxp_ueips_t;
-
-
 typedef struct dfxp_shm_s
 {
     dfxp_shm_cmd cmd;
     dfxp_shm_status status;
-    //union
-    //{
-        dfxp_traffic_config_t cfgTraffic;
-        dfxp_ports_t cfgPorts;
-        dfxp_ueips_t  cfgUeIp;
-        dfxp_shm_ip_gtps_t cfgIpGtps;
-        dfxp_stats_t stats;
-    //} value;
+    dfxp_traffic_config_t cfgTraffic;
+    dfxp_ports_t cfgPorts;
+    dfxp_shm_ip_gtps_t cfgIpGtps;
+    dfxp_stats_t stats;
 } dfxp_shm_t;
 
 int dfxp_shm_main(int argc, char **argv);
