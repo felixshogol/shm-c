@@ -44,6 +44,7 @@ typedef enum
     DFXP_SHM_CMD_ADD_IP_GTP,
     DFXP_SHM_CMD_DEL_IP_GTP,
     DFXP_SHM_CMD_GET_STATS,
+    DFXP_SHM_CMD_CLEAR_CONFIG,
 
 } dfxp_shm_cmd;
 
