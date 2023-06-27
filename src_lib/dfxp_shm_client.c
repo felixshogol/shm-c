@@ -14,7 +14,7 @@
 static int error(const char *msg);
 
 static dfxp_shm_t *shared_mem_ptr;
-static sem_t *mutex_sem, *buffer_count_sem, *spool_signal_sem;
+static sem_t *buffer_count_sem, *spool_signal_sem;
 static int fd_shm;
 
 static void dump_shm_ports(char *title, dfxp_ports_t *ports);
@@ -43,10 +43,6 @@ int ShmInit(const char *name, int oflag, int mode)
     if ((shared_mem_ptr = (dfxp_shm_t *)mmap(NULL, sizeof(dfxp_shm_t), PROT_READ | PROT_WRITE, MAP_SHARED,
                                              fd_shm, 0)) == MAP_FAILED)
         error("mmap");
-
-    //  mutual exclusion semaphore, mutex_sem
-    if ((mutex_sem = sem_open(SEM_MUTEX_NAME, 0, 0, 0)) == SEM_FAILED)
-        error("sem_open");
 
     // counting semaphore, indicating the number of available buffers.
     if ((buffer_count_sem = sem_open(SEM_BUFFER_COUNT_NAME, 0, 0, 0)) == SEM_FAILED)
@@ -81,17 +77,11 @@ int ShmSizeofIpGtps()
 
 int ShmWrite(dfxp_shm_t *shm)
 {
-    printf("DEBUG: %s:%d:%s \n", __FILE__, __LINE__, __func__);
+    printf("DEBUG: %s:%d:%s  wait buffer_count_sem\n", __FILE__, __LINE__, __func__);
 
     // get a buffer: P (buffer_count_sem);
     if (sem_wait(buffer_count_sem) == -1)
         error("sem_wait: buffer_count_sem");
-
-    printf("DEBUG: %s:%d:%s -> wait mutex_sem\n", __FILE__, __LINE__, __func__);
-
-    /* There might be multiple producers. Only one producer uses buffer_index at a time.  */
-    if (sem_wait(mutex_sem) == -1)
-        error("mutex_sem");
 
     printf("DEBUG: %s:%d:%s -> writing shn\n", __FILE__, __LINE__, __func__);
 
@@ -106,11 +96,8 @@ int ShmWrite(dfxp_shm_t *shm)
 
     sleep(1);
 
-    // Release mutex sem: V (mutex_sem)
-    if (sem_post(mutex_sem) == -1)
-        error("sem_post: mutex_sem");
-
     // Tell spooler that there is a string to print: V (spool_signal_sem);
+    printf("DEBUG: %s:%d:%s  post spool_signal_sem\n", __FILE__, __LINE__, __func__);
     if (sem_post(spool_signal_sem) == -1)
         error("sem_post: spool_signal_sem");
 

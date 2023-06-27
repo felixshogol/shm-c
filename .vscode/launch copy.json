@@ -6,7 +6,9 @@
       "type": "cppdbg",
       "request": "launch",
       "args": [
-        "start"
+        "config",
+        "-c",
+        "${workspaceFolder}/shm_client.conf"
       ],
       "stopAtEntry": false,
       "externalConsole": false,
