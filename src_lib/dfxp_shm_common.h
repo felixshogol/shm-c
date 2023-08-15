@@ -6,7 +6,6 @@
 #include <netinet/ip.h>
 #include <netinet/ip6.h>
 
-#define SEM_MUTEX_NAME "/sem-mutex-dfxp-shm"
 #define SEM_BUFFER_COUNT_NAME "/sem-count-dfxp-shm"
 #define SEM_SPOOL_SIGNAL_NAME "/sem-spool-dfxp-shm"
 #define SHARED_MEM_NAME "/dfxp-shm"
